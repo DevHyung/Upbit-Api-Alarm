@@ -1,37 +1,38 @@
 import requests
 import json
 import time
-from openpyxl import Workbook
-#===    GLOBAL
-excelHeader = ['코인명','현재가','전일대비','거래대금']
-FILENAME = 'coin.xlsx'
+from pygame import mixer
+mixer.init()
+
+def get_time_str():
+    now = time.localtime()
+    nowTime = "%04d-%02d-%02d %02d:%02d:%02d" % (
+    now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
+    return nowTime
 def get_symbol_list():
-    print(">>> 코인 심볼 받아오기 시작 ")
-    KRW_File = open("KRW_LIST.txt",'w')
-    BTC_File = open("BTC_LIST.txt",'w')
-    ETH_File = open("ETH_LIST.txt",'w')
-    USDT_File = open("USDT_LIST.txt",'w')
+    print("[ {} ] >>> : 코인 심볼 초기화".format(get_time_str()))
+    KRW_List = []
+    BTC_List = []
+    ETH_List = []
+    USDT_List = []
     url = "https://api.upbit.com/v1/market/all"
     response = requests.request("GET", url)
     jsonStr = json.loads(response.text)
     for coin in jsonStr:
         if 'BTC-' in coin['market']:
-            BTC_File.write(coin['market']+'\n')
+            KRW_List.append(coin['market']+'\n')
         elif 'KRW-' in coin['market']:
-            KRW_File.write(coin['market']+'\n')
+            BTC_List.append(coin['market']+'\n')
         elif 'ETH-' in coin['market']:
-            ETH_File.write(coin['market']+'\n')
+            ETH_List.append(coin['market']+'\n')
         else:
-            USDT_File.write(coin['market']+'\n')
-    USDT_File.close()
-    BTC_File.close()
-    ETH_File.close()
-    USDT_File.close()
-    print(">>> 코인 심볼 받아오기 끝 ")
+            USDT_List.append(coin['market']+'\n')
+
+    print("[ {} ] >>> : 코인 심볼 초기화 완료".format(get_time_str()))
 
 def valid_user():
     # 20180806 17:10기준 20시간
-    print(time.time())
+    #print(time.time())
     now = 1533542992.9937532
     terminTime = now + 60 * 60 * 20
     print("체험판 만료기간 : ", time.ctime(terminTime))
