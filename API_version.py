@@ -44,3 +44,4 @@ def valid_user():
 
 if __name__ == "__main__":
     valid_user()
+    get_symbol_list()
