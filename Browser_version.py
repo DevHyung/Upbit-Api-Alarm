@@ -19,8 +19,9 @@ def getReadyIdx():
     try:
         driver.set_window_size(1000, 1000)
         driver.get("https://upbit.com/exchange?")
-        delay = 10  # seconds
-        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="root"]/div/div/div[2]/section[2]/article[1]/span[2]/div/div/div/div[1]/table/tbody/tr[2]/td[3]')))
+        delay = 20  # seconds
+
+        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="root"]/div/div/div[3]/div/section[2]/article[1]/span[2]/ul/li[2]/a')))
         print(">>> Page is ready ! ")
         bs = BeautifulSoup(driver.page_source, "lxml")
         div = bs.find("section", class_="ty02").find("div", class_="scrollB").find("table")
@@ -45,6 +46,7 @@ def getReadyIdx():
         print(">>> Ready Page Search Complete !")
     except TimeoutException:
         print("ERROR : Loading took too much time!")
+    print(readyidx,namelist)
     return readyidx,namelist
 
 if __name__ == "__main__":
